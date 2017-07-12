@@ -78,6 +78,7 @@ def error(bot, update, error):
 def vote_start(bot, job):
     global vote_in_progress
     global vote_start_time
+    voters.clear()
     vote_in_progress = True
     bot.send_message(chat_id=CHAT_ID,text=VOTE_START_MSG)
 
