@@ -10,6 +10,7 @@ from datetime import datetime, timedelta, time, date
 import logging
 import re
 import os
+import sys
 
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -24,10 +25,11 @@ vote_in_progress = False
 voters = {}
 
 # secret token from BotFather
-SECRET_TOKEN = os.getenv('LUNCH_VOTING_BOT_SECRET_TOKEN', "incorrect_secret_token")
+SECRET_TOKEN_ENV = os.getenv('LUNCH_VOTING_BOT_SECRET_TOKEN', "")
 
 # chat id
-CHAT_ID = int(os.getenv('LUNCH_VOTING_BOT_CHAT_ID', "incorrect_chat_id"))
+CHAT_ID_ENV = os.getenv('LUNCH_VOTING_BOT_CHAT_ID', "")
+CHAT_ID = 0
 
 VOTE_BEGIN_TIME = (8,00)
 LUNCH_HOUR_TIME = (12,00)
@@ -100,8 +102,20 @@ def vote_end(bot, job):
     bot.send_message(chat_id=CHAT_ID,text=VOTE_STOP_MSG+voter_message)
 
 def main():
+    global CHAT_ID
+    if SECRET_TOKEN_ENV == "":
+        sys.exit("Incorrect token")
+
+    if CHAT_ID_ENV == "":
+        sys.exit("Incorrect chat id")
+
+    try:
+        CHAT_ID = int(CHAT_ID_ENV)
+    except:
+        sys.exit("Incorrect chat id")
+
     # Create the EventHandler and pass it your bot's token.
-    updater = Updater(SECRET_TOKEN)
+    updater = Updater(SECRET_TOKEN_ENV)
 
     # Get the dispatcher to register handlers
     dp = updater.dispatcher
