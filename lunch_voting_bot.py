@@ -36,6 +36,7 @@ LUNCH_HOUR_TIME = (12,00)
 LUNCH_REMIND = 30 #minutes before lunch
 LUNCH_WEEK_DAYS = (0, 1, 2, 3, 4)
 MAX_DELAY = 30
+VOTE_BEGIN_SILENT = True
 
 VOTE_START_MSG = "Обед в %d:%d\nесть время подумать" % (LUNCH_HOUR_TIME[0],LUNCH_HOUR_TIME[1])
 VOTE_REMIND_MSG = "Обед через %d минут" % LUNCH_REMIND
@@ -82,7 +83,8 @@ def vote_start(bot, job):
     global vote_start_time
     voters.clear()
     vote_in_progress = True
-    bot.send_message(chat_id=CHAT_ID,text=VOTE_START_MSG)
+    if not VOTE_BEGIN_SILENT:
+        bot.send_message(chat_id=CHAT_ID,text=VOTE_START_MSG)
 
 def vote_remind(bot, job):
     bot.send_message(chat_id=CHAT_ID,text=VOTE_REMIND_MSG)
